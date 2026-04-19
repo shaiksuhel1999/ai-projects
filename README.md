@@ -1,2 +1,1 @@
-# learn-ai
-This Repository All About AI Models From Scratch
+This Repository All About AI Integration Projects
