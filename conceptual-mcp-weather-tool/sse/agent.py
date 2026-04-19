@@ -3,7 +3,7 @@ from google.genai import types
 from mcp_client import MCPClient
 import asyncio
 
-MY_API_KEY = "AIzaSyAcyeborUSkrsOuhmUdwg4aolkFLtO8MM8"
+MY_API_KEY = "AAAAAAKJHNJYHBJYHYHB"
 client = genai.Client(api_key=MY_API_KEY)
 mcp = MCPClient()
 
