@@ -1,0 +1,444 @@
+{
+  "products": [
+    {
+      "productId": "P1001",
+      "name": "iPhone 15",
+      "brand": "Apple",
+      "category": "Smartphone",
+      "price": "799 USD",
+      "features": ["Great camera", "iOS ecosystem", "premium build"]
+    },
+    {
+      "productId": "P1002",
+      "name": "Samsung Galaxy S24",
+      "brand": "Samsung",
+      "category": "Smartphone",
+      "price": "749 USD",
+      "features": ["AMOLED display", "Galaxy AI", "smooth performance"]
+    },
+    {
+      "productId": "P1003",
+      "name": "Google Pixel 8",
+      "brand": "Google",
+      "category": "Smartphone",
+      "price": "699 USD",
+      "features": ["Excellent camera", "clean Android", "AI tools"]
+    },
+    {
+      "productId": "P1004",
+      "name": "OnePlus 12",
+      "brand": "OnePlus",
+      "category": "Smartphone",
+      "price": "649 USD",
+      "features": ["Fast charging", "flagship specs", "gaming performance"]
+    },
+    {
+      "productId": "P1005",
+      "name": "Redmi Note 13 Pro",
+      "brand": "Xiaomi",
+      "category": "Smartphone",
+      "price": "299 USD",
+      "features": ["Budget value", "200MP camera", "AMOLED display"]
+    },
+    {
+      "productId": "P1006",
+      "name": "Moto G84",
+      "brand": "Motorola",
+      "category": "Smartphone",
+      "price": "249 USD",
+      "features": ["Clean Android", "battery life", "good value"]
+    },
+    {
+      "productId": "P1007",
+      "name": "MacBook Air M3",
+      "brand": "Apple",
+      "category": "Laptop",
+      "price": "1099 USD",
+      "features": ["M3 chip", "battery life", "lightweight"]
+    },
+    {
+      "productId": "P1008",
+      "name": "Dell XPS 13",
+      "brand": "Dell",
+      "category": "Laptop",
+      "price": "1199 USD",
+      "features": ["Premium Windows laptop", "portability"]
+    },
+    {
+      "productId": "P1009",
+      "name": "HP Spectre x360",
+      "brand": "HP",
+      "category": "Laptop",
+      "price": "1299 USD",
+      "features": ["Convertible design", "touchscreen"]
+    },
+    {
+      "productId": "P1010",
+      "name": "Lenovo ThinkPad X1 Carbon",
+      "brand": "Lenovo",
+      "category": "Laptop",
+      "price": "1399 USD",
+      "features": ["Business class", "keyboard", "durability"]
+    },
+    {
+      "productId": "P1011",
+      "name": "Asus ROG Zephyrus G14",
+      "brand": "Asus",
+      "category": "Gaming Laptop",
+      "price": "1599 USD",
+      "features": ["Gaming", "RTX graphics", "portable"]
+    },
+    {
+      "productId": "P1012",
+      "name": "Acer Aspire 5",
+      "brand": "Acer",
+      "category": "Laptop",
+      "price": "599 USD",
+      "features": ["Budget productivity laptop"]
+    },
+    {
+      "productId": "P1013",
+      "name": "Sony WH-1000XM5",
+      "brand": "Sony",
+      "category": "Headphones",
+      "price": "399 USD",
+      "features": ["Noise cancelling", "premium sound"]
+    },
+    {
+      "productId": "P1014",
+      "name": "AirPods Pro 2",
+      "brand": "Apple",
+      "category": "Earbuds",
+      "price": "249 USD",
+      "features": ["ANC", "Apple integration"]
+    },
+    {
+      "productId": "P1015",
+      "name": "Samsung Galaxy Buds 2 Pro",
+      "brand": "Samsung",
+      "category": "Earbuds",
+      "price": "229 USD",
+      "features": ["Good sound", "Android ecosystem"]
+    },
+    {
+      "productId": "P1016",
+      "name": "JBL Tune 760NC",
+      "brand": "JBL",
+      "category": "Headphones",
+      "price": "129 USD",
+      "features": ["Bass sound", "ANC"]
+    },
+    {
+      "productId": "P1017",
+      "name": "Boat Airdopes 141",
+      "brand": "Boat",
+      "category": "Earbuds",
+      "price": "49 USD",
+      "features": ["Budget TWS", "long battery"]
+    },
+    {
+      "productId": "P1018",
+      "name": "Apple Watch Series 9",
+      "brand": "Apple",
+      "category": "Smartwatch",
+      "price": "399 USD",
+      "features": ["Health tracking", "notifications"]
+    },
+    {
+      "productId": "P1019",
+      "name": "Samsung Galaxy Watch 6",
+      "brand": "Samsung",
+      "category": "Smartwatch",
+      "price": "349 USD",
+      "features": ["Wear OS", "fitness tracking"]
+    },
+    {
+      "productId": "P1020",
+      "name": "Noise ColorFit Pro",
+      "brand": "Noise",
+      "category": "Smartwatch",
+      "price": "79 USD",
+      "features": ["Affordable smart features"]
+    },
+    {
+      "productId": "P1021",
+      "name": "iPad Air",
+      "brand": "Apple",
+      "category": "Tablet",
+      "price": "599 USD",
+      "features": ["Productivity", "Apple Pencil support"]
+    },
+    {
+      "productId": "P1022",
+      "name": "Samsung Galaxy Tab S9",
+      "brand": "Samsung",
+      "category": "Tablet",
+      "price": "699 USD",
+      "features": ["AMOLED tablet", "Android productivity"]
+    },
+    {
+      "productId": "P1023",
+      "name": "Amazon Kindle Paperwhite",
+      "brand": "Amazon",
+      "category": "E-reader",
+      "price": "149 USD",
+      "features": ["Reading", "glare-free screen"]
+    },
+    {
+      "productId": "P1024",
+      "name": "Canon EOS R10",
+      "brand": "Canon",
+      "category": "Camera",
+      "price": "979 USD",
+      "features": ["Mirrorless", "content creation"]
+    },
+    {
+      "productId": "P1025",
+      "name": "Sony ZV-E10",
+      "brand": "Sony",
+      "category": "Camera",
+      "price": "799 USD",
+      "features": ["Vlogging camera"]
+    },
+    {
+      "productId": "P1026",
+      "name": "Nikon Z50",
+      "brand": "Nikon",
+      "category": "Camera",
+      "price": "899 USD",
+      "features": ["Compact mirrorless"]
+    },
+    {
+      "productId": "P1027",
+      "name": "Logitech MX Master 3S",
+      "brand": "Logitech",
+      "category": "Mouse",
+      "price": "99 USD",
+      "features": ["Productivity mouse"]
+    },
+    {
+      "productId": "P1028",
+      "name": "Logitech MX Keys",
+      "brand": "Logitech",
+      "category": "Keyboard",
+      "price": "119 USD",
+      "features": ["Premium typing keyboard"]
+    },
+    {
+      "productId": "P1029",
+      "name": "Razer DeathAdder V3",
+      "brand": "Razer",
+      "category": "Gaming Mouse",
+      "price": "149 USD",
+      "features": ["Esports gaming mouse"]
+    },
+    {
+      "productId": "P1030",
+      "name": "Keychron K2",
+      "brand": "Keychron",
+      "category": "Keyboard",
+      "price": "89 USD",
+      "features": ["Mechanical keyboard"]
+    },
+    {
+      "productId": "P1031",
+      "name": "PlayStation 5",
+      "brand": "Sony",
+      "category": "Gaming Console",
+      "price": "499 USD",
+      "features": ["4K gaming", "exclusives"]
+    },
+    {
+      "productId": "P1032",
+      "name": "Xbox Series X",
+      "brand": "Microsoft",
+      "category": "Gaming Console",
+      "price": "499 USD",
+      "features": ["Game Pass", "powerful console"]
+    },
+    {
+      "productId": "P1033",
+      "name": "Nintendo Switch OLED",
+      "brand": "Nintendo",
+      "category": "Gaming Console",
+      "price": "349 USD",
+      "features": ["Portable gaming"]
+    },
+    {
+      "productId": "P1034",
+      "name": "LG C3 OLED TV",
+      "brand": "LG",
+      "category": "Television",
+      "price": "1499 USD",
+      "features": ["OLED picture quality"]
+    },
+    {
+      "productId": "P1035",
+      "name": "Samsung QLED Q80C",
+      "brand": "Samsung",
+      "category": "Television",
+      "price": "1299 USD",
+      "features": ["Bright display", "smart TV"]
+    },
+    {
+      "productId": "P1036",
+      "name": "Mi TV X Series",
+      "brand": "Xiaomi",
+      "category": "Television",
+      "price": "599 USD",
+      "features": ["Budget smart TV"]
+    },
+    {
+      "productId": "P1037",
+      "name": "Dyson V15 Detect",
+      "brand": "Dyson",
+      "category": "Vacuum Cleaner",
+      "price": "749 USD",
+      "features": ["Powerful cordless cleaning"]
+    },
+    {
+      "productId": "P1038",
+      "name": "Philips Air Fryer XL",
+      "brand": "Philips",
+      "category": "Kitchen Appliance",
+      "price": "199 USD",
+      "features": ["Healthy cooking"]
+    },
+    {
+      "productId": "P1039",
+      "name": "Instant Pot Duo",
+      "brand": "Instant Pot",
+      "category": "Kitchen Appliance",
+      "price": "129 USD",
+      "features": ["Multi cooker"]
+    },
+    {
+      "productId": "P1040",
+      "name": "Breville Barista Express",
+      "brand": "Breville",
+      "category": "Coffee Machine",
+      "price": "699 USD",
+      "features": ["Home espresso machine"]
+    },
+    {
+      "productId": "P1041",
+      "name": "Adidas Ultraboost",
+      "brand": "Adidas",
+      "category": "Shoes",
+      "price": "189 USD",
+      "features": ["Running comfort"]
+    },
+    {
+      "productId": "P1042",
+      "name": "Nike Air Max 270",
+      "brand": "Nike",
+      "category": "Shoes",
+      "price": "159 USD",
+      "features": ["Casual comfort"]
+    },
+    {
+      "productId": "P1043",
+      "name": "Puma RS-X",
+      "brand": "Puma",
+      "category": "Shoes",
+      "price": "129 USD",
+      "features": ["Streetwear style"]
+    },
+    {
+      "productId": "P1044",
+      "name": "Levi's 511 Jeans",
+      "brand": "Levi's",
+      "category": "Clothing",
+      "price": "69 USD",
+      "features": ["Slim fit jeans"]
+    },
+    {
+      "productId": "P1045",
+      "name": "Uniqlo Hoodie",
+      "brand": "Uniqlo",
+      "category": "Clothing",
+      "price": "49 USD",
+      "features": ["Everyday comfort"]
+    },
+    {
+      "productId": "P1046",
+      "name": "Patagonia Jacket",
+      "brand": "Patagonia",
+      "category": "Clothing",
+      "price": "199 USD",
+      "features": ["Outdoor wear"]
+    },
+    {
+      "productId": "P1047",
+      "name": "Herschel Backpack",
+      "brand": "Herschel",
+      "category": "Bag",
+      "price": "89 USD",
+      "features": ["Stylish daily backpack"]
+    },
+    {
+      "productId": "P1048",
+      "name": "Samsonite Luggage",
+      "brand": "Samsonite",
+      "category": "Travel",
+      "price": "249 USD",
+      "features": ["Durable suitcase"]
+    },
+    {
+      "productId": "P1049",
+      "name": "Casio G-Shock",
+      "brand": "Casio",
+      "category": "Watch",
+      "price": "129 USD",
+      "features": ["Rugged durability"]
+    },
+    {
+      "productId": "P1050",
+      "name": "Fossil Gen 6",
+      "brand": "Fossil",
+      "category": "Smartwatch",
+      "price": "299 USD",
+      "features": ["Wear OS watch"]
+    },
+    {
+      "productId": "P1051",
+      "name": "TP-Link Archer AX55",
+      "brand": "TP-Link",
+      "category": "Router",
+      "price": "139 USD",
+      "features": ["WiFi 6 router"]
+    },
+    {
+      "productId": "P1052",
+      "name": "Seagate 2TB External HDD",
+      "brand": "Seagate",
+      "category": "Storage",
+      "price": "79 USD",
+      "features": ["Backup storage"]
+    },
+    {
+      "productId": "P1053",
+      "name": "Samsung T7 SSD",
+      "brand": "Samsung",
+      "category": "Storage",
+      "price": "119 USD",
+      "features": ["Fast portable SSD"]
+    },
+    {
+      "productId": "P1054",
+      "name": "WD Blue 1TB SSD",
+      "brand": "Western Digital",
+      "category": "Storage",
+      "price": "89 USD",
+      "features": ["Internal SSD upgrade"]
+    },
+    {
+      "productId": "P1055",
+      "name": "Anker Power Bank 20000mAh",
+      "brand": "Anker",
+      "category": "Accessories",
+      "price": "59 USD",
+      "features": ["Fast charging portable battery"]
+    }
+  ]
+}
