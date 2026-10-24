@@ -1,0 +1,95 @@
+# A horizontally-scaled TekmaChain P2P mesh: N node pods, each with its own MySQL
+# sidecar, discovering each other through a headless Service and converging on the
+# longest valid chain. Scale with `kubectl -n tekmachain scale statefulset/tekmachain-node --replicas=5`.
+apiVersion: v1
+kind: Service
+metadata:
+  name: tekmachain-nodes
+  namespace: tekmachain
+spec:
+  clusterIP: None                 # headless: gives each pod a stable DNS name
+  selector:
+    app: tekmachain-node
+  ports:
+    - name: http
+      port: 8080
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: tekmachain-node
+  namespace: tekmachain
+spec:
+  serviceName: tekmachain-nodes
+  replicas: 3
+  selector:
+    matchLabels:
+      app: tekmachain-node
+  template:
+    metadata:
+      labels:
+        app: tekmachain-node
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.4
+          args: ["--mysql-native-password=ON"]
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: root
+            - name: MYSQL_DATABASE
+              value: tekma_chain
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/mysql
+          readinessProbe:
+            exec:
+              command: ["mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+            initialDelaySeconds: 15
+            periodSeconds: 5
+        - name: app
+          image: tekmachain:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: TEKMACHAIN_DB_HOST
+              value: "127.0.0.1"           # each node talks to its own MySQL sidecar
+            - name: TEKMACHAIN_DB_PORT
+              value: "3306"
+            - name: TEKMACHAIN_DB_NAME
+              value: tekma_chain
+            - name: TEKMACHAIN_DB_USER
+              value: root
+            - name: TEKMACHAIN_DB_PASSWORD
+              value: root
+            # Stable per-pod URL other nodes can reach us at.
+            - name: TEKMACHAIN_NODE_SELF_URL
+              value: "http://$(POD_NAME).tekmachain-nodes.tekmachain.svc.cluster.local:8080"
+            # Everyone rendezvouses at node-0, then gossip discovers the rest of the mesh.
+            - name: TEKMACHAIN_NODE_PEERS
+              value: "http://tekmachain-node-0.tekmachain-nodes.tekmachain.svc.cluster.local:8080"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 45
+            periodSeconds: 10
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "1Gi"
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 2Gi

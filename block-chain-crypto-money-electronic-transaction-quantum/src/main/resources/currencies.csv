@@ -1,0 +1,137 @@
+code,name,symbol,country,usdRate
+USD,US Dollar,$,United States,1
+EUR,Euro,€,Eurozone,0.92
+JPY,Japanese Yen,¥,Japan,150
+GBP,British Pound,£,United Kingdom,0.79
+CNY,Chinese Yuan,¥,China,7.24
+INR,Indian Rupee,₹,India,83.2
+AUD,Australian Dollar,A$,Australia,1.52
+CAD,Canadian Dollar,C$,Canada,1.36
+CHF,Swiss Franc,Fr,Switzerland,0.88
+HKD,Hong Kong Dollar,HK$,Hong Kong,7.82
+SGD,Singapore Dollar,S$,Singapore,1.35
+NZD,New Zealand Dollar,NZ$,New Zealand,1.64
+SEK,Swedish Krona,kr,Sweden,10.5
+NOK,Norwegian Krone,kr,Norway,10.7
+DKK,Danish Krone,kr,Denmark,6.9
+KRW,South Korean Won,₩,South Korea,1330
+TWD,New Taiwan Dollar,NT$,Taiwan,31.5
+MXN,Mexican Peso,$,Mexico,17.1
+BRL,Brazilian Real,R$,Brazil,5.0
+RUB,Russian Ruble,₽,Russia,92
+ZAR,South African Rand,R,South Africa,18.7
+TRY,Turkish Lira,₺,Turkey,32
+AED,UAE Dirham,د.إ,United Arab Emirates,3.67
+SAR,Saudi Riyal,﷼,Saudi Arabia,3.75
+PLN,Polish Zloty,zł,Poland,4.0
+THB,Thai Baht,฿,Thailand,36
+IDR,Indonesian Rupiah,Rp,Indonesia,15700
+MYR,Malaysian Ringgit,RM,Malaysia,4.7
+PHP,Philippine Peso,₱,Philippines,56
+VND,Vietnamese Dong,₫,Vietnam,24500
+CZK,Czech Koruna,Kč,Czechia,23
+HUF,Hungarian Forint,Ft,Hungary,360
+RON,Romanian Leu,lei,Romania,4.6
+ILS,Israeli New Shekel,₪,Israel,3.7
+CLP,Chilean Peso,$,Chile,950
+COP,Colombian Peso,$,Colombia,3900
+ARS,Argentine Peso,$,Argentina,900
+PEN,Peruvian Sol,S/,Peru,3.75
+EGP,Egyptian Pound,£,Egypt,48
+NGN,Nigerian Naira,₦,Nigeria,1500
+KES,Kenyan Shilling,KSh,Kenya,130
+GHS,Ghanaian Cedi,₵,Ghana,15
+MAD,Moroccan Dirham,DH,Morocco,10
+DZD,Algerian Dinar,دج,Algeria,134
+TND,Tunisian Dinar,د.ت,Tunisia,3.1
+PKR,Pakistani Rupee,₨,Pakistan,278
+BDT,Bangladeshi Taka,৳,Bangladesh,110
+LKR,Sri Lankan Rupee,Rs,Sri Lanka,300
+NPR,Nepalese Rupee,रू,Nepal,133
+MMK,Myanmar Kyat,K,Myanmar,2100
+KHR,Cambodian Riel,៛,Cambodia,4100
+LAK,Lao Kip,₭,Laos,21000
+BND,Brunei Dollar,B$,Brunei,1.35
+MNT,Mongolian Tugrik,₮,Mongolia,3400
+KZT,Kazakhstani Tenge,₸,Kazakhstan,470
+UZS,Uzbekistani Som,soʻm,Uzbekistan,12600
+GEL,Georgian Lari,₾,Georgia,2.7
+AZN,Azerbaijani Manat,₼,Azerbaijan,1.7
+AMD,Armenian Dram,֏,Armenia,395
+UAH,Ukrainian Hryvnia,₴,Ukraine,40
+BYN,Belarusian Ruble,Br,Belarus,3.3
+RSD,Serbian Dinar,дин,Serbia,108
+BGN,Bulgarian Lev,лв,Bulgaria,1.8
+HRK,Croatian Kuna,kn,Croatia,6.9
+ISK,Icelandic Krona,kr,Iceland,138
+QAR,Qatari Riyal,﷼,Qatar,3.64
+KWD,Kuwaiti Dinar,د.ك,Kuwait,0.31
+BHD,Bahraini Dinar,.د.ب,Bahrain,0.376
+OMR,Omani Rial,﷼,Oman,0.385
+JOD,Jordanian Dinar,د.ا,Jordan,0.71
+LBP,Lebanese Pound,ل.ل,Lebanon,89500
+IQD,Iraqi Dinar,ع.د,Iraq,1310
+IRR,Iranian Rial,﷼,Iran,42000
+YER,Yemeni Rial,﷼,Yemen,250
+AFN,Afghan Afghani,؋,Afghanistan,72
+SYP,Syrian Pound,£,Syria,13000
+ETB,Ethiopian Birr,Br,Ethiopia,57
+TZS,Tanzanian Shilling,TSh,Tanzania,2600
+UGX,Ugandan Shilling,USh,Uganda,3800
+ZMW,Zambian Kwacha,ZK,Zambia,26
+MZN,Mozambican Metical,MT,Mozambique,64
+AOA,Angolan Kwanza,Kz,Angola,850
+BWP,Botswana Pula,P,Botswana,13.6
+NAD,Namibian Dollar,N$,Namibia,18.7
+MUR,Mauritian Rupee,₨,Mauritius,46
+RWF,Rwandan Franc,FRw,Rwanda,1300
+XOF,West African CFA Franc,CFA,West Africa,605
+XAF,Central African CFA Franc,FCFA,Central Africa,605
+CDF,Congolese Franc,FC,DR Congo,2800
+SDG,Sudanese Pound,ج.س,Sudan,600
+LYD,Libyan Dinar,ل.د,Libya,4.85
+GMD,Gambian Dalasi,D,Gambia,68
+SLL,Sierra Leonean Leone,Le,Sierra Leone,22000
+LRD,Liberian Dollar,L$,Liberia,193
+SOS,Somali Shilling,Sh,Somalia,571
+DJF,Djiboutian Franc,Fdj,Djibouti,178
+MWK,Malawian Kwacha,MK,Malawi,1730
+BIF,Burundian Franc,FBu,Burundi,2870
+MGA,Malagasy Ariary,Ar,Madagascar,4500
+XPF,CFP Franc,₣,French Polynesia,110
+PGK,Papua New Guinean Kina,K,Papua New Guinea,3.9
+FJD,Fijian Dollar,FJ$,Fiji,2.25
+WST,Samoan Tala,WS$,Samoa,2.75
+TOP,Tongan Paanga,T$,Tonga,2.38
+VUV,Vanuatu Vatu,VT,Vanuatu,119
+SBD,Solomon Islands Dollar,SI$,Solomon Islands,8.5
+DOP,Dominican Peso,RD$,Dominican Republic,59
+JMD,Jamaican Dollar,J$,Jamaica,156
+TTD,Trinidad Dollar,TT$,Trinidad and Tobago,6.8
+BSD,Bahamian Dollar,B$,Bahamas,1
+BBD,Barbadian Dollar,Bds$,Barbados,2
+BZD,Belize Dollar,BZ$,Belize,2.01
+XCD,East Caribbean Dollar,EC$,Eastern Caribbean,2.7
+GTQ,Guatemalan Quetzal,Q,Guatemala,7.8
+CRC,Costa Rican Colon,₡,Costa Rica,520
+HNL,Honduran Lempira,L,Honduras,24.7
+NIO,Nicaraguan Cordoba,C$,Nicaragua,36.8
+PAB,Panamanian Balboa,B/.,Panama,1
+UYU,Uruguayan Peso,$U,Uruguay,39
+PYG,Paraguayan Guarani,₲,Paraguay,7500
+BOB,Bolivian Boliviano,Bs,Bolivia,6.9
+VES,Venezuelan Bolivar,Bs.S,Venezuela,36
+SRD,Surinamese Dollar,$,Suriname,35
+GYD,Guyanese Dollar,G$,Guyana,209
+HTG,Haitian Gourde,G,Haiti,132
+CUP,Cuban Peso,₱,Cuba,24
+BTN,Bhutanese Ngultrum,Nu,Bhutan,83.2
+MVR,Maldivian Rufiyaa,Rf,Maldives,15.4
+MOP,Macanese Pataca,MOP$,Macau,8.05
+KGS,Kyrgyzstani Som,с,Kyrgyzstan,89
+TJS,Tajikistani Somoni,ЅМ,Tajikistan,10.9
+TMT,Turkmenistani Manat,m,Turkmenistan,3.5
+MDL,Moldovan Leu,L,Moldova,17.7
+ALL,Albanian Lek,L,Albania,93
+MKD,Macedonian Denar,ден,North Macedonia,56
+BAM,Bosnia Marka,KM,Bosnia and Herzegovina,1.8

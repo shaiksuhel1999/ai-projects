@@ -1,0 +1,79 @@
+# Single self-contained TekmaChain node backed by the embedded H2 database on a
+# persistent volume — no separate database Pod needed. (For a MySQL-backed or
+# multi-node deployment, use mysql.yaml + the `mysql` profile, or p2p-cluster.yaml.)
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: tekmachain-data
+  namespace: tekmachain
+spec:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tekmachain-app
+  namespace: tekmachain
+spec:
+  replicas: 1                      # H2 file store is single-writer; scale out via the MySQL/p2p variant
+  strategy:
+    type: Recreate                 # don't let two pods hold the same H2 file during a rollout
+  selector:
+    matchLabels:
+      app: tekmachain-app
+  template:
+    metadata:
+      labels:
+        app: tekmachain-app
+    spec:
+      containers:
+        - name: app
+          image: tekmachain:latest
+          imagePullPolicy: IfNotPresent   # load the locally-built image into your cluster
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:h2:file:/data/tekmachain;MODE=MySQL;DB_CLOSE_ON_EXIT=FALSE"
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 40
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 15
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "1Gi"
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: tekmachain-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tekmachain
+  namespace: tekmachain
+spec:
+  type: NodePort
+  selector:
+    app: tekmachain-app
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30080

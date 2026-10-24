@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>TekmaChain</title>
+    <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div class="app">
+    <aside class="sidebar">
+        <div class="brand">
+            <span class="logo">◆</span>
+            <span class="bname">Tekma<span class="accent">Chain</span></span>
+        </div>
+        <nav class="nav" id="tabs">
+            <button class="tab active" data-view="dashboard"><svg class="nav-ico" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg><span>Dashboard</span></button>
+            <button class="tab" data-view="wallet"><svg class="nav-ico" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 9h18"/><circle cx="16.5" cy="13.5" r="1.2"/></svg><span>Wallet</span></button>
+            <button class="tab" data-view="profile" id="navProfile" hidden><svg class="nav-ico" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg><span>Profile</span></button>
+            <button class="tab" data-view="exchange"><svg class="nav-ico" viewBox="0 0 24 24"><polyline points="3 16 9 10 13 14 21 6"/><polyline points="15 6 21 6 21 12"/></svg><span>Exchange</span></button>
+            <button class="tab" data-view="explorer"><svg class="nav-ico" viewBox="0 0 24 24"><path d="M12 2 21 7v10l-9 5-9-5V7z"/><path d="M3.4 7 12 12l8.6-5"/><path d="M12 12v10"/></svg><span>Explorer</span></button>
+            <button class="tab" data-view="network"><svg class="nav-ico" viewBox="0 0 24 24"><circle cx="6" cy="12" r="2.4"/><circle cx="18" cy="6" r="2.4"/><circle cx="18" cy="18" r="2.4"/><path d="M8.2 10.9 15.8 7.1M8.2 13.1 15.8 16.9"/></svg><span>Network</span></button>
+            <button class="tab" data-view="security"><svg class="nav-ico" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.5 8 8 11 4.5-3 8-6 8-11V5z"/><path d="M9 12l2 2 4-4"/></svg><span>Security</span></button>
+        </nav>
+        <div class="sidebar-foot">
+            <div class="net-status"><span class="dot on" id="sideDot"></span><span id="sideNet" class="mono small">standalone</span></div>
+        </div>
+    </aside>
+
+    <div class="main">
+        <header class="topbar">
+            <div class="page-title" id="pageTitle">Dashboard</div>
+            <div class="topbar-right">
+                <div class="tb-field"><span class="idlabel">Currency</span>
+                    <select id="displayCur" onchange="onDisplayCurChange()" class="cur-select" title="Display currency"></select></div>
+                <div class="tb-field"><span class="idlabel">Wallet</span>
+                    <select id="identity" onchange="onIdentityChange()"></select></div>
+                <span class="chip" id="heightChip" title="Chain height">#0</span>
+                <button class="btn tiny tb-signin" id="tbGuest" onclick="openAuth()" hidden>
+                    <svg class="usvg" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
+                    <span>Sign in</span>
+                </button>
+                <div class="tb-user" id="tbUser" hidden>
+                    <span class="avatar" id="uavatar" title="View profile" onclick="showView('profile')"></span>
+                    <span class="uname" id="uname" title="View profile" onclick="showView('profile')"></span>
+                    <button class="btn tiny" onclick="logout()">Sign out</button>
+                </div>
+            </div>
+        </header>
+
+        <main class="content">
+    <!-- DASHBOARD -->
+    <section class="view active" id="view-dashboard">
+        <div class="kpis" id="kpis"></div>
+        <div class="econ-strip" id="econStrip"></div>
+        <div class="two">
+            <div class="panel">
+                <div class="panel-h">TEK / USD price<span class="spacer"></span><span id="dashPriceLast" class="mono"></span></div>
+                <div id="dashPriceChart" class="chart-wrap"></div>
+            </div>
+            <div class="panel">
+                <div class="panel-h">Currency converter<span class="spacer"></span><span id="convTekUsd" class="small"></span></div>
+                <div id="converter" class="converter"></div>
+            </div>
+        </div>
+        <div class="two">
+            <div class="panel"><div class="panel-h">24h volume by market</div><div id="dashVolChart" class="chart-wrap"></div></div>
+            <div class="panel"><div class="panel-h">TEK minted per block</div><div id="dashMintChart" class="chart-wrap"></div></div>
+        </div>
+        <h3 class="section-title">TEK markets</h3>
+        <div class="market-cards" id="marketCards"></div>
+        <div class="panel" id="liveMarketsPanel">
+            <div class="panel-h">Live crypto markets
+                <span class="live-badge" id="mktLive" style="display:none">● LIVE</span>
+                <span class="spacer"></span>
+                <span id="mktStatus" class="small"></span>
+                <button class="btn tiny" title="Refresh now" onclick="refreshMarkets()">↻</button>
+            </div>
+            <p class="hint" style="margin:0 0 10px">Real-world prices from Coinbase, synced on a schedule — reference data only, not tradable here. Tekma Coin stays the one fictional asset.</p>
+            <div id="liveMarkets" class="market-table"></div>
+        </div>
+        <div class="two">
+            <div class="panel"><div class="panel-h">Latest blocks</div><div id="dashBlocks" class="mini-list"></div></div>
+            <div class="panel"><div class="panel-h">Latest trades</div><div id="dashTrades" class="mini-list"></div></div>
+        </div>
+    </section>
+
+    <!-- PROFILE -->
+    <section class="view" id="view-profile">
+        <div class="panel profile-head" id="profileHead"></div>
+        <div class="kpis" id="profileKpis"></div>
+        <div class="two">
+            <div class="panel"><div class="panel-h">Holdings</div><div id="profileHoldings" class="market-table"></div></div>
+            <div class="panel"><div class="panel-h">Your wallets</div><div id="profileWallets" class="mini-list"></div></div>
+        </div>
+        <div class="two">
+            <div class="panel">
+                <div class="panel-h">🏦 Bank accounts <span class="spacer"></span><span class="small" style="color:var(--muted-2)">for fiat deposit / withdraw</span></div>
+                <div class="acct-body">
+                    <div id="bankList" class="acct-list"></div>
+                    <div class="acct-form">
+                        <input id="bankHolder" placeholder="Account holder name"/>
+                        <input id="bankName" placeholder="Bank name (e.g. HDFC Bank)"/>
+                        <div class="row">
+                            <input id="bankNumber" class="grow" placeholder="Account number"/>
+                            <input id="bankCode" placeholder="IFSC"/>
+                        </div>
+                        <button class="btn primary" onclick="linkAccount('BANK')">+ Link bank account</button>
+                    </div>
+                </div>
+            </div>
+            <div class="panel">
+                <div class="panel-h">📈 Demat accounts <span class="spacer"></span><span class="small" style="color:var(--muted-2)">holds your securities</span></div>
+                <div class="acct-body">
+                    <div id="dematList" class="acct-list"></div>
+                    <div class="acct-form">
+                        <input id="dematHolder" placeholder="Account holder name"/>
+                        <input id="dematDepo" placeholder="Depository (NSDL / CDSL)"/>
+                        <div class="row">
+                            <input id="dematNumber" class="grow" placeholder="Demat / client id"/>
+                            <input id="dematCode" placeholder="DP id"/>
+                        </div>
+                        <button class="btn primary" onclick="linkAccount('DEMAT')">+ Link demat account</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WALLET -->
+    <section class="view" id="view-wallet">
+        <div class="panel">
+            <div class="panel-h">
+                Wallets<span class="spacer"></span>
+                <input id="walletLabel" placeholder="Label e.g. Alice"/>
+                <button class="btn primary" onclick="createWallet()">+ Custodial</button>
+                <button class="btn" onclick="createSelfWallet()">🔐 Self-custody</button>
+                <button class="btn" onclick="createHybridWallet()">🛡 Quantum-safe</button>
+                <button class="btn" onclick="createHdWallet()">🌱 HD wallet</button>
+            </div>
+            <p class="hint">A wallet is a secp256k1 key pair — it doesn't hold coins, it holds the keys
+                controlling unspent outputs on the chain. <b>Mine</b> to a wallet to give it its first TEK.
+                <b>Self-custody</b> wallets generate and sign entirely in your browser — the node never sees the private key.</p>
+            <div id="wallets" class="wallet-grid"></div>
+        </div>
+
+        <div class="two">
+            <div class="panel">
+                <div class="panel-h">Send TEK</div>
+                <div class="form">
+                    <label>From<select id="sendFrom"></select></label>
+                    <label>To<select id="sendTo"></select></label>
+                    <div class="row">
+                        <label class="grow">Amount<input id="sendAmount" type="number" step="0.00000001" placeholder="10"/></label>
+                        <label class="grow">Fee<input id="sendFee" type="number" step="0.00000001" value="0.1"/></label>
+                    </div>
+                    <button class="btn primary" onclick="sendTx()">Sign &amp; broadcast →</button>
+                </div>
+            </div>
+            <div class="panel">
+                <div class="panel-h">Mine a block</div>
+                <div class="form">
+                    <label>Miner (reward + fees go here)<select id="mineMiner"></select></label>
+                    <button class="btn mine" onclick="mine()">⛏ Mine block · Proof-of-Work</button>
+                    <div id="mineResult" class="result"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-h">Transaction history <span class="spacer"></span><span id="histAddr" class="mono small"></span></div>
+            <div id="walletHistory" class="mini-list"></div>
+        </div>
+    </section>
+
+    <!-- EXCHANGE -->
+    <section class="view" id="view-exchange">
+        <div class="ex-grid">
+            <aside class="ex-left">
+                <div class="panel">
+                    <div class="panel-h">Markets</div>
+                    <div id="pairList" class="pair-list"></div>
+                </div>
+                <div class="panel">
+                    <div class="panel-h">Account <span class="spacer"></span><span id="exIdentity" class="mono small"></span></div>
+                    <div id="exBalances" class="bal-list"></div>
+                    <div class="fund-actions">
+                        <button class="btn tiny" onclick="toggleFunding('deposit')">Deposit</button>
+                        <button class="btn tiny" onclick="toggleFunding('withdraw')">Withdraw</button>
+                    </div>
+                    <div id="fundingPanel" class="funding hidden"></div>
+                </div>
+            </aside>
+
+            <section class="ex-center">
+                <div class="ticker" id="ticker"></div>
+                <div class="panel">
+                    <div class="panel-h">Price <span class="spacer"></span><span id="chartLast" class="small mono"></span></div>
+                    <div id="exPriceChart" class="chart-wrap"></div>
+                </div>
+                <div class="book-trades">
+                    <div class="panel book">
+                        <div class="panel-h">Order book <span class="spacer"></span><span id="bookPair" class="small mono"></span></div>
+                        <div id="orderbook"></div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-h">Recent trades</div>
+                        <div id="exTrades" class="trade-feed"></div>
+                    </div>
+                </div>
+                <div class="panel">
+                    <div class="panel-h">Market depth</div>
+                    <div id="exDepthChart" class="chart-wrap"></div>
+                </div>
+            </section>
+
+            <aside class="ex-right">
+                <div class="panel">
+                    <div class="order-form">
+                        <div class="seg side" id="segSide">
+                            <button class="seg-btn buy active" data-side="BUY">Buy</button>
+                            <button class="seg-btn sell" data-side="SELL">Sell</button>
+                        </div>
+                        <div class="seg type" id="segType">
+                            <button class="seg-btn active" data-type="LIMIT">Limit</button>
+                            <button class="seg-btn" data-type="MARKET">Market</button>
+                        </div>
+                        <label id="priceRow">Price (<span class="qsym">USD</span>)
+                            <input id="ordPrice" type="number" step="0.00000001" oninput="recalcTotal()" placeholder="0.00"/></label>
+                        <label>Amount (TEK)
+                            <input id="ordAmount" type="number" step="0.00000001" oninput="recalcTotal()" placeholder="0.00"/></label>
+                        <div class="total-row">Total <span id="ordTotal" class="mono">–</span></div>
+                        <div class="avail small" id="ordAvail"></div>
+                        <button class="btn place buy" id="placeBtn" onclick="placeOrder()">Buy TEK</button>
+                    </div>
+                </div>
+                <div class="panel">
+                    <div class="panel-h">Open orders</div>
+                    <div id="openOrders" class="order-list"></div>
+                </div>
+                <div class="panel">
+                    <div class="panel-h">Order history</div>
+                    <div id="orderHistory" class="order-list"></div>
+                </div>
+            </aside>
+        </div>
+    </section>
+
+    <!-- EXPLORER -->
+    <section class="view" id="view-explorer">
+        <div class="panel">
+            <div class="panel-h">Blockchain<span class="spacer"></span>
+                <button class="btn" onclick="validateChain()">✓ Validate chain</button>
+            </div>
+            <div id="validation"></div>
+            <div id="blocks" class="blocks"></div>
+        </div>
+    </section>
+
+    <!-- NETWORK -->
+    <section class="view" id="view-network">
+        <div class="panel">
+            <div class="panel-h">Peer network <span class="badge" id="nodeIdBadge">–</span><span class="spacer"></span>
+                <input id="peerUrl" placeholder="http://localhost:8081"/>
+                <button class="btn primary" onclick="addPeer()">+ Add peer</button>
+                <button class="btn" onclick="syncNow()">⟳ Sync</button>
+            </div>
+            <p class="hint">This node: <span id="selfUrl" class="mono">–</span>. Nodes gossip transactions &amp;
+                blocks over HTTP and converge on the <b>longest valid chain</b>. Start more nodes on other ports
+                (<span class="mono">--server.port=8081</span>) and connect them here.</p>
+            <div id="peers" class="peer-list"></div>
+        </div>
+    </section>
+
+    <!-- SECURITY (Phase 9 — post-quantum lab) -->
+    <section class="view" id="view-security">
+        <div class="panel">
+            <div class="panel-h">Post-Quantum Security Lab<span class="spacer"></span>
+                <button class="btn primary" onclick="runPqBenchmark()">▶ Run benchmark</button>
+            </div>
+            <div class="pq-threat">
+                <p>TekmaChain signs with <b>secp256k1 ECDSA</b>, exactly like Bitcoin. A sufficiently powerful quantum
+                    computer running <b>Shor's algorithm</b> could recover an ECDSA private key from its public key —
+                    letting it forge signatures and move coins. The defence is <b>post-quantum signatures</b>
+                    (NIST's <span class="mono">ML-DSA / CRYSTALS-Dilithium</span>, <span class="mono">Falcon</span>)
+                    whose security doesn't rest on the discrete-log problem.</p>
+                <p class="hint">Below, TekmaChain benchmarks ECDSA against those schemes head-to-head — real key sizes,
+                    signature sizes and sign/verify timings measured on this node. The catch: post-quantum signatures
+                    are much larger, which is the real cost of putting them on a chain.</p>
+            </div>
+            <div id="pqResult"><p class="empty">Click <b>Run benchmark</b> to measure ECDSA vs post-quantum signatures.</p></div>
+        </div>
+    </section>
+        </main>
+    </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<!-- AI guide (embedded RAG assistant) -->
+<button class="assistant-fab" id="assistantFab" onclick="toggleAssistant()" title="Ask the TekmaChain guide">
+    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.5 8.5 0 0 1-3.6-.8L3 21l1.9-5.4A8.5 8.5 0 1 1 21 11.5z"/><circle cx="8.5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="15.5" cy="12" r="1"/></svg>
+</button>
+<div class="assistant-panel" id="assistantPanel">
+    <div class="ap-head">
+        <div class="ap-title"><span class="ap-avatar">✨</span><div><b>Tekma Assistant</b><span>Your guide — what to use, when</span></div></div>
+        <button class="ap-close" onclick="toggleAssistant()">✕</button>
+    </div>
+    <div class="ap-msgs" id="apMsgs"></div>
+    <div class="ap-input">
+        <input id="apInput" placeholder="Ask about wallets, trading, mining…" onkeydown="if(event.key==='Enter')sendAssistant()"/>
+        <button class="btn primary" onclick="sendAssistant()">Send</button>
+    </div>
+</div>
+
+<!-- AUTH GATE -->
+<div class="auth-overlay" id="authOverlay" hidden>
+    <div class="auth-card">
+        <div class="auth-brand"><span class="logo">◆</span> <span class="bname">Tekma<span class="accent">Chain</span></span></div>
+        <p class="auth-sub">Sign in to manage wallets, trade and mine. Browsing the markets needs no account.</p>
+        <div class="auth-tabs">
+            <button class="auth-tab active" id="tabLogin" onclick="setAuthMode('login')">Sign in</button>
+            <button class="auth-tab" id="tabRegister" onclick="setAuthMode('register')">Create account</button>
+        </div>
+        <div class="auth-form">
+            <label>Username<input id="authUser" autocomplete="username" placeholder="e.g. alice"
+                onkeydown="if(event.key==='Enter')submitAuth()"/></label>
+            <label id="authNameRow" hidden>Display name<input id="authName" placeholder="Alice (optional)"
+                onkeydown="if(event.key==='Enter')submitAuth()"/></label>
+            <label>Password<input id="authPass" type="password" autocomplete="current-password" placeholder="at least 6 characters"
+                onkeydown="if(event.key==='Enter')submitAuth()"/></label>
+            <div class="auth-err" id="authErr"></div>
+            <button class="btn primary auth-submit" id="authSubmit" onclick="submitAuth()">Sign in</button>
+            <button class="auth-guest" onclick="browseAsGuest()">Just browse the markets →</button>
+        </div>
+        <p class="auth-foot">A local, fictional-currency demo. Passwords are stored only as salted BCrypt hashes.</p>
+    </div>
+</div>
+
+<script src="tekma-crypto.js"></script>
+<script src="bip39-wordlist.js"></script>
+<script src="tekma-hd.js"></script>
+<script src="charts.js"></script>
+<script src="app.js"></script>
+<script src="exchange.js"></script>
+<script src="assistant.js"></script>
+</body>
+</html>

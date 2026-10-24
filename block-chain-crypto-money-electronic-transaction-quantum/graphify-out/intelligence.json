@@ -1,0 +1,36 @@
+{
+  "hotspots": [
+    {
+      "label": "TekmaCrypto",
+      "risk": 0.502,
+      "type": "FUNCTION"
+    },
+    {
+      "label": "Charts",
+      "risk": 0.439,
+      "type": "FUNCTION"
+    },
+    {
+      "label": "ChainValidator",
+      "risk": 0.42,
+      "type": "CLASS"
+    },
+    {
+      "label": "CryptoUtil",
+      "risk": 0.408,
+      "type": "CLASS"
+    },
+    {
+      "label": "MatchingEngine",
+      "risk": 0.31,
+      "type": "CLASS"
+    }
+  ],
+  "blast_radius": {
+    "$()": 58,
+    "api()": 39,
+    "Order": 29,
+    "CryptoUtil": 26,
+    "Trade": 23
+  }
+}

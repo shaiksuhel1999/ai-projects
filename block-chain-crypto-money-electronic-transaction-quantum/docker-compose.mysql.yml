@@ -1,0 +1,37 @@
+# TekmaChain backed by MySQL instead of the default embedded H2.
+#   docker compose -f docker-compose.mysql.yml up --build     then open http://localhost:8080
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: tekmachain-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: tekma_chain
+    ports:
+      - "3306:3306"
+    volumes:
+      - tekma-mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  app:
+    build: .
+    container_name: tekmachain-app
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: mysql
+      TEKMACHAIN_DB_HOST: mysql
+      TEKMACHAIN_DB_PORT: "3306"
+      TEKMACHAIN_DB_NAME: tekma_chain
+      TEKMACHAIN_DB_USER: root
+      TEKMACHAIN_DB_PASSWORD: root
+    ports:
+      - "8080:8080"
+
+volumes:
+  tekma-mysql:

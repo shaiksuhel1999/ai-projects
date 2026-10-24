@@ -1,0 +1,19 @@
+# TekmaChain — a single self-contained node with an embedded H2 database.
+# Nothing else to install or run:
+#   docker compose up --build      then open http://localhost:8080
+#
+# Prefer MySQL? See docker-compose.mysql.yml (adds a MySQL service and the `mysql` profile).
+services:
+  app:
+    build: .
+    container_name: tekmachain-app
+    environment:
+      # persist the embedded H2 database file in a named volume so data survives restarts
+      SPRING_DATASOURCE_URL: "jdbc:h2:file:/data/tekmachain;MODE=MySQL;DB_CLOSE_ON_EXIT=FALSE"
+    ports:
+      - "8080:8080"
+    volumes:
+      - tekma-data:/data
+
+volumes:
+  tekma-data:
