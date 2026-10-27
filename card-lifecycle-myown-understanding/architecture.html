@@ -1,0 +1,643 @@
+<title>Anatomy of a Swipe</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+  :root {
+    --ground: #eef1ec;
+    --surface: #fbfcfa;
+    --surface-2: #f1f4ef;
+    --ink: #17201c;
+    --muted: #55615c;
+    --faint: #7c8a84;
+    --border: #dde3dc;
+    --border-strong: #c3ccc3;
+    --accent: #0c6b5e;
+    --accent-ink: #0a5d52;
+    --accent-soft: #dcebe6;
+    --approve: #0f7a55;
+    --approve-soft: #dcece3;
+    --decline: #b0491f;
+    --decline-soft: #f3e2d8;
+    --memo: #916d00;
+    --memo-soft: #f0e8cf;
+    --shadow: 0 1px 2px rgba(20,30,25,.04), 0 8px 24px rgba(20,30,25,.05);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0d1411;
+      --surface: #121b17;
+      --surface-2: #16211c;
+      --ink: #e7ede9;
+      --muted: #97a89f;
+      --faint: #6f817a;
+      --border: #223029;
+      --border-strong: #31423a;
+      --accent: #43c3ac;
+      --accent-ink: #5fd2bc;
+      --accent-soft: #14312b;
+      --approve: #56c996;
+      --approve-soft: #12291f;
+      --decline: #e2905f;
+      --decline-soft: #2e1d13;
+      --memo: #d8ad39;
+      --memo-soft: #2b230f;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.35);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #0d1411;
+    --surface: #121b17;
+    --surface-2: #16211c;
+    --ink: #e7ede9;
+    --muted: #97a89f;
+    --faint: #6f817a;
+    --border: #223029;
+    --border-strong: #31423a;
+    --accent: #43c3ac;
+    --accent-ink: #5fd2bc;
+    --accent-soft: #14312b;
+    --approve: #56c996;
+    --approve-soft: #12291f;
+    --decline: #e2905f;
+    --decline-soft: #2e1d13;
+    --memo: #d8ad39;
+    --memo-soft: #2b230f;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.35);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 940px; margin: 0 auto; padding: 0 24px; }
+  .col { max-width: 68ch; }
+
+  h1, h2, h3 { font-family: "Archivo", "IBM Plex Sans", sans-serif; letter-spacing: -0.02em; text-wrap: balance; }
+  a { color: var(--accent-ink); }
+
+  code, .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+
+  .eyebrow {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+  }
+
+  /* ---- Masthead ---- */
+  header.mast {
+    border-bottom: 1px solid var(--border);
+    background:
+      linear-gradient(var(--surface-2), var(--surface-2)) padding-box;
+  }
+  .mast-inner { padding: 68px 0 48px; }
+  .kicker {
+    display: inline-flex; align-items: center; gap: 9px;
+    font-family: "IBM Plex Mono", monospace; font-size: 12.5px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--muted);
+    border: 1px solid var(--border-strong); border-radius: 999px;
+    padding: 5px 13px; margin-bottom: 26px;
+  }
+  .kicker .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--approve); box-shadow: 0 0 0 3px var(--approve-soft); }
+  h1 { font-size: clamp(2.7rem, 7vw, 4.4rem); font-weight: 800; line-height: 1.0; margin: 0 0 22px; }
+  h1 .thin { font-weight: 600; color: var(--muted); display: block; font-size: 0.42em; letter-spacing: 0.02em; margin-top: 18px; }
+  .standfirst { font-size: 1.2rem; color: var(--muted); max-width: 60ch; margin: 0; }
+
+  .specsheet {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+    background: var(--border); border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden; margin-top: 40px;
+  }
+  .specsheet div { background: var(--surface); padding: 16px 18px; }
+  .specsheet dt { font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint); margin: 0 0 6px; }
+  .specsheet dd { margin: 0; font-family: "Archivo", sans-serif; font-weight: 700; font-size: 1.15rem; font-variant-numeric: tabular-nums; }
+
+  /* ---- Sections ---- */
+  section { padding: 60px 0; border-bottom: 1px solid var(--border); }
+  .sec-head { margin-bottom: 30px; }
+  .sec-head .eyebrow { display: block; margin-bottom: 12px; }
+  h2 { font-size: clamp(1.7rem, 3.6vw, 2.35rem); font-weight: 700; margin: 0 0 12px; }
+  h2 + p { margin-top: 0; color: var(--muted); }
+  p { margin: 0 0 16px; }
+  .lead { font-size: 1.08rem; }
+
+  /* ---- Figures ---- */
+  figure { margin: 34px 0 8px; }
+  .figbox {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 26px 22px; box-shadow: var(--shadow);
+    overflow-x: auto;
+  }
+  figure svg { display: block; width: 100%; height: auto; color: var(--ink); }
+  figcaption {
+    font-size: 0.9rem; color: var(--faint); margin-top: 14px; padding-left: 2px;
+    font-family: "IBM Plex Mono", monospace; letter-spacing: 0.01em;
+  }
+  figcaption b { color: var(--muted); font-weight: 600; }
+
+  /* SVG shared classes */
+  .node { fill: var(--surface-2); stroke: var(--border-strong); stroke-width: 1.5; }
+  .node-accent { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.5; }
+  .node-approve { fill: var(--approve-soft); stroke: var(--approve); stroke-width: 1.5; }
+  .node-decline { fill: var(--decline-soft); stroke: var(--decline); stroke-width: 1.5; }
+  .node-memo { fill: var(--memo-soft); stroke: var(--memo); stroke-width: 1.5; }
+  .nlabel { fill: var(--ink); font: 600 14px "IBM Plex Sans", sans-serif; text-anchor: middle; }
+  .nsub { fill: var(--muted); font: 500 11px "IBM Plex Mono", monospace; text-anchor: middle; }
+  .edge { fill: none; stroke: var(--border-strong); stroke-width: 1.6; }
+  .edge-approve { stroke: var(--approve); }
+  .edge-decline { stroke: var(--decline); }
+  .edge-accent { stroke: var(--accent); }
+  .edge-memo { stroke: var(--memo); }
+  /* Marker fills must be set via CSS — var() does not resolve in SVG presentation attributes. */
+  #fl-arr path, #cl-arr path, #dp-arr path, #lg-arr path { fill: var(--border-strong); }
+  #fl-arr-ap path, #cl-arr-ok path, #dp-arr-ok path { fill: var(--approve); }
+  #cl-arr-no path, #dp-arr-no path { fill: var(--decline); }
+  #lg-arr-m path { fill: var(--memo); }
+  .elabel { fill: var(--muted); font: 500 11.5px "IBM Plex Mono", monospace; }
+  .elabel-c { fill: var(--muted); font: 500 11.5px "IBM Plex Mono", monospace; text-anchor: middle; }
+  .tick { fill: var(--ink); font: 500 12.5px "IBM Plex Mono", monospace; }
+  .tick-approve { fill: var(--approve); }
+  .tick-decline { fill: var(--decline); }
+
+  /* ---- Ledger formula callout ---- */
+  .ledger {
+    background: var(--surface); border: 1px solid var(--border-strong); border-radius: 12px;
+    padding: 22px 24px; margin: 28px 0; box-shadow: var(--shadow);
+  }
+  .ledger .eq {
+    font-family: "IBM Plex Mono", monospace; font-size: clamp(0.85rem, 2.3vw, 1.05rem);
+    font-weight: 500; line-height: 1.9; overflow-x: auto; white-space: nowrap; padding-bottom: 4px;
+  }
+  .ledger .eq .term { color: var(--ink); }
+  .ledger .eq .minus { color: var(--faint); padding: 0 4px; }
+  .ledger .eq .credit { color: var(--approve); }
+  .ledger .eq .memo { color: var(--memo); }
+  .ledger .note { font-size: 0.9rem; color: var(--muted); margin: 12px 0 0; }
+
+  /* ---- Response code table ---- */
+  .tablewrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow); }
+  table { border-collapse: collapse; width: 100%; font-size: 0.92rem; background: var(--surface); }
+  thead th {
+    text-align: left; font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--faint); font-weight: 600;
+    padding: 13px 16px; border-bottom: 1px solid var(--border-strong); background: var(--surface-2);
+    white-space: nowrap;
+  }
+  tbody td { padding: 12px 16px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  tbody tr:last-child td { border-bottom: none; }
+  td.code { font-family: "IBM Plex Mono", monospace; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .pill {
+    display: inline-block; font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.04em; padding: 3px 9px; border-radius: 999px; white-space: nowrap;
+  }
+  .pill.ok { color: var(--approve); background: var(--approve-soft); }
+  .pill.no { color: var(--decline); background: var(--decline-soft); }
+
+  /* ---- API surface grid ---- */
+  .api { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; margin-top: 28px; }
+  .api .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: 16px 17px; box-shadow: var(--shadow);
+  }
+  .api .card h3 { font-size: 0.82rem; font-family: "IBM Plex Mono", monospace; font-weight: 600; letter-spacing: 0.04em;
+    margin: 0 0 10px; color: var(--accent-ink); display: flex; align-items: baseline; gap: 8px; }
+  .api .card h3 .n { color: var(--faint); font-size: 0.9em; }
+  .api .card ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 5px; }
+  .api .card li { font-size: 0.82rem; color: var(--muted); font-family: "IBM Plex Mono", monospace; }
+  .api .card li .m { color: var(--ink); font-weight: 600; }
+
+  /* ---- Feature panels ---- */
+  .panels { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; margin-top: 26px; }
+  .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; box-shadow: var(--shadow); }
+  .panel .ic { font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--accent-ink); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
+  .panel h3 { font-size: 1.05rem; margin: 0 0 8px; font-weight: 700; }
+  .panel p { font-size: 0.92rem; color: var(--muted); margin: 0; }
+
+  .steps { list-style: none; counter-reset: s; margin: 22px 0 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+  .steps li { counter-increment: s; display: grid; grid-template-columns: 34px 1fr; gap: 14px; align-items: baseline; padding: 11px 0; border-top: 1px dashed var(--border); }
+  .steps li:first-child { border-top: none; }
+  .steps li::before { content: counter(s, decimal-leading-zero); font-family: "IBM Plex Mono", monospace; font-weight: 600; color: var(--accent-ink); font-size: 0.85rem; }
+  .steps li b { font-weight: 600; }
+  .steps li span { color: var(--muted); }
+
+  footer { padding: 46px 0 70px; }
+  .foot { display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: center; color: var(--faint); font-size: 0.85rem; font-family: "IBM Plex Mono", monospace; }
+  .foot .b { color: var(--muted); }
+
+  .theme-toggle {
+    position: fixed; top: 16px; right: 16px; z-index: 10;
+    font-family: "IBM Plex Mono", monospace; font-size: 12px; letter-spacing: 0.05em;
+    background: var(--surface); color: var(--muted); border: 1px solid var(--border-strong);
+    border-radius: 999px; padding: 7px 13px; cursor: pointer;
+  }
+  .theme-toggle:hover { color: var(--ink); border-color: var(--accent); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+
+  @media (max-width: 640px) {
+    body { font-size: 16px; }
+    .specsheet { grid-template-columns: repeat(2, 1fr); }
+    .mast-inner { padding: 52px 0 38px; }
+  }
+</style>
+
+<button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle colour theme">◐ theme</button>
+
+<header class="mast">
+  <div class="wrap mast-inner">
+    <span class="kicker"><span class="dot"></span> Credit-card processing · system reference</span>
+    <h1>Anatomy of a Swipe
+      <span class="thin">How a card transaction travels from the POS terminal to the issuer — and the entire lifecycle wrapped around it.</span>
+    </h1>
+    <dl class="specsheet">
+      <div><dt>Runtime</dt><dd>Java 21</dd></div>
+      <div><dt>Framework</dt><dd>Spring Boot 3</dd></div>
+      <div><dt>API groups</dt><dd>13</dd></div>
+      <div><dt>Tests</dt><dd>14 green</dd></div>
+    </dl>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ AUTH FLOW ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="eyebrow">The four-party model</span>
+      <h2>An authorization crosses four institutions in about a second</h2>
+      <p class="col">A card is an instrument on a revolving credit account. When it is tapped, the request hops from the terminal to the acquiring bank, across the card network, to the issuer that actually holds the money — and the decision travels the same road back.</p>
+    </div>
+
+    <figure>
+      <div class="figbox">
+        <svg viewBox="0 0 900 300" role="img" aria-label="Authorization request flows left to right from POS terminal to acquirer to card network to issuer; the response returns right to left. The issuer runs eligibility, fraud and funds checks.">
+          <defs>
+            <marker id="fl-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0 0 L10 5 L0 10 z" fill="var(--border-strong)"/>
+            </marker>
+            <marker id="fl-arr-ap" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0 0 L10 5 L0 10 z" fill="var(--approve)"/>
+            </marker>
+          </defs>
+
+          <!-- nodes -->
+          <g>
+            <rect class="node" x="14" y="70" width="150" height="70" rx="10"/>
+            <text class="nlabel" x="89" y="100">POS terminal</text>
+            <text class="nsub" x="89" y="120">tap / swipe</text>
+
+            <rect class="node" x="260" y="70" width="150" height="70" rx="10"/>
+            <text class="nlabel" x="335" y="100">Acquirer</text>
+            <text class="nsub" x="335" y="120">merchant bank</text>
+
+            <rect class="node" x="506" y="70" width="150" height="70" rx="10"/>
+            <text class="nlabel" x="581" y="100">Card network</text>
+            <text class="nsub" x="581" y="120">routes by BIN</text>
+
+            <rect class="node-accent" x="736" y="70" width="150" height="70" rx="10"/>
+            <text class="nlabel" x="811" y="100">Issuer</text>
+            <text class="nsub" x="811" y="120">holds the money</text>
+          </g>
+
+          <!-- request arrows (top) -->
+          <line class="edge" x1="164" y1="90" x2="256" y2="90" marker-end="url(#fl-arr)"/>
+          <line class="edge" x1="410" y1="90" x2="502" y2="90" marker-end="url(#fl-arr)"/>
+          <line class="edge" x1="656" y1="90" x2="732" y2="90" marker-end="url(#fl-arr)"/>
+          <text class="elabel-c" x="210" y="80">0100</text>
+          <text class="elabel-c" x="456" y="80">auth req</text>
+          <text class="elabel-c" x="694" y="80">route</text>
+
+          <!-- response arrows (bottom) -->
+          <line class="edge edge-approve" x1="732" y1="122" x2="656" y2="122" marker-end="url(#fl-arr-ap)"/>
+          <line class="edge edge-approve" x1="502" y1="122" x2="410" y2="122" marker-end="url(#fl-arr-ap)"/>
+          <line class="edge edge-approve" x1="256" y1="122" x2="164" y2="122" marker-end="url(#fl-arr-ap)"/>
+          <text class="elabel-c tick-approve" x="694" y="145">0110</text>
+          <text class="elabel-c tick-approve" x="456" y="145">code + auth</text>
+          <text class="elabel-c tick-approve" x="210" y="145">receipt</text>
+
+          <!-- issuer decision ladder -->
+          <line class="edge edge-accent" x1="811" y1="140" x2="811" y2="176" marker-end="url(#fl-arr)"/>
+          <rect class="node" x="646" y="182" width="330" height="96" rx="10"/>
+          <text class="nsub" x="811" y="204" style="font-weight:600; fill: var(--accent-ink);">ISSUER DECISION — in order</text>
+          <text class="tick" x="672" y="230">1 · eligibility</text>
+          <text class="nsub" x="672" y="248" style="text-anchor:start;">card active? not expired? account ok?</text>
+          <text class="tick" x="672" y="266">2 · fraud &amp; velocity   3 · funds → place hold</text>
+        </svg>
+      </div>
+      <figcaption>Request <b>0100</b> travels terminal → issuer; response <b>0110</b> returns the ISO&nbsp;8583 result code and an approval code. On approval the issuer places a <b>hold</b> on available credit — no money has moved yet.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ CLEARING STATE MACHINE ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="eyebrow">Clearing &amp; settlement</span>
+      <h2>Approval is a promise; posting is the money</h2>
+      <p class="col">An approved authorization is only a hold. The merchant <em>captures</em> it (clearing), a batch job <em>settles</em> it between banks, and only then is the amount truly posted. Every branch off the happy path is its own terminal state.</p>
+    </div>
+
+    <figure>
+      <div class="figbox">
+        <svg viewBox="0 0 900 260" role="img" aria-label="State machine: a request is APPROVED or DECLINED. AUTHORIZED can be REVERSED or move to CAPTURED, then SETTLED, then REFUNDED.">
+          <defs>
+            <marker id="cl-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M0 0 L10 5 L0 10 z" fill="var(--border-strong)"/>
+            </marker>
+            <marker id="cl-arr-no" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M0 0 L10 5 L0 10 z" fill="var(--decline)"/>
+            </marker>
+            <marker id="cl-arr-ok" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M0 0 L10 5 L0 10 z" fill="var(--approve)"/>
+            </marker>
+          </defs>
+
+          <!-- main line -->
+          <rect class="node-approve" x="30" y="104" width="150" height="58" rx="10"/>
+          <text class="nlabel" x="105" y="132">AUTHORIZED</text>
+          <text class="nsub" x="105" y="150">hold placed</text>
+
+          <rect class="node" x="360" y="104" width="150" height="58" rx="10"/>
+          <text class="nlabel" x="435" y="132">CAPTURED</text>
+          <text class="nsub" x="435" y="150">posted to balance</text>
+
+          <rect class="node-approve" x="690" y="104" width="180" height="58" rx="10"/>
+          <text class="nlabel" x="780" y="132">SETTLED</text>
+          <text class="nsub" x="780" y="150">interbank money moves</text>
+
+          <line class="edge edge-approve" x1="180" y1="133" x2="356" y2="133" marker-end="url(#cl-arr-ok)"/>
+          <line class="edge edge-approve" x1="510" y1="133" x2="686" y2="133" marker-end="url(#cl-arr-ok)"/>
+          <text class="elabel-c" x="268" y="123">capture</text>
+          <text class="elabel-c" x="598" y="123">settle batch</text>
+
+          <!-- declined (above authorized) -->
+          <rect class="node-decline" x="30" y="20" width="150" height="52" rx="10"/>
+          <text class="nlabel" x="105" y="45">DECLINED</text>
+          <text class="nsub" x="105" y="62">code 51 / 54 / 65…</text>
+          <line class="edge edge-decline" x1="105" y1="104" x2="105" y2="76" marker-end="url(#cl-arr-no)"/>
+
+          <!-- reversed (below authorized) -->
+          <rect class="node-decline" x="30" y="196" width="150" height="48" rx="10"/>
+          <text class="nlabel" x="105" y="225">REVERSED</text>
+          <line class="edge edge-decline" x1="105" y1="162" x2="105" y2="192" marker-end="url(#cl-arr-no)"/>
+          <text class="elabel" x="118" y="182">reverse</text>
+
+          <!-- refunded (below settled) -->
+          <rect class="node" x="690" y="196" width="180" height="48" rx="10"/>
+          <text class="nlabel" x="780" y="225">REFUNDED</text>
+          <line class="edge" x1="780" y1="162" x2="780" y2="192" marker-end="url(#cl-arr)"/>
+          <text class="elabel" x="792" y="182">refund</text>
+        </svg>
+      </div>
+      <figcaption><b>Green</b> is the happy path; <b>clay</b> marks a terminal exit. A settlement batch runs on a schedule — the real-time-auth + batch-settle hybrid that card networks actually use.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ LEDGER / MEMO POST ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="eyebrow">The money model</span>
+      <h2>Two balances: what’s posted, and what’s pending</h2>
+      <p class="col">A real card ledger separates the <b>posted</b> balance (hard-posted, drives the statement) from the <b>memo</b> balance (pending entries that already affect what you can spend). Available credit is computed from both, plus authorization holds.</p>
+    </div>
+
+    <div class="ledger">
+      <div class="eq">
+        <span class="term">availableCredit</span> =
+        <span class="term">creditLimit</span>
+        <span class="minus">−</span><span class="term">postedBalance</span>
+        <span class="minus">−</span><span class="term">holdAmount</span>
+        <span class="minus">−</span><span class="memo">memoBalance</span>
+      </div>
+      <p class="note">A memo <span style="color:var(--memo)">debit</span> is positive and shrinks available credit; a memo <span style="color:var(--approve)">credit</span> (like a dispute’s provisional credit) is negative and frees it up.</p>
+    </div>
+
+    <figure>
+      <div class="figbox">
+        <svg viewBox="0 0 900 180" role="img" aria-label="A memo post changes available credit immediately, hits the memo balance, then the posting cycle hard-posts it onto the ledger balance which feeds the statement.">
+          <defs>
+            <marker id="lg-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M0 0 L10 5 L0 10 z" fill="var(--border-strong)"/>
+            </marker>
+            <marker id="lg-arr-m" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M0 0 L10 5 L0 10 z" fill="var(--memo)"/>
+            </marker>
+          </defs>
+
+          <rect class="node-memo" x="20" y="60" width="150" height="60" rx="10"/>
+          <text class="nlabel" x="95" y="88">Memo post</text>
+          <text class="nsub" x="95" y="107">adjustment · prov. credit</text>
+
+          <rect class="node" x="285" y="60" width="150" height="60" rx="10"/>
+          <text class="nlabel" x="360" y="88">Memo balance</text>
+          <text class="nsub" x="360" y="107">available ↕ now</text>
+
+          <rect class="node" x="550" y="60" width="160" height="60" rx="10"/>
+          <text class="nlabel" x="630" y="88">Ledger balance</text>
+          <text class="nsub" x="630" y="107">posted · hard</text>
+
+          <rect class="node-accent" x="770" y="60" width="118" height="60" rx="10"/>
+          <text class="nlabel" x="829" y="94">Statement</text>
+
+          <line class="edge edge-memo" x1="170" y1="90" x2="281" y2="90" marker-end="url(#lg-arr-m)"/>
+          <line class="edge" x1="435" y1="90" x2="546" y2="90" marker-end="url(#lg-arr)"/>
+          <line class="edge" x1="710" y1="90" x2="766" y2="90" marker-end="url(#lg-arr)"/>
+          <text class="elabel-c" x="225" y="80">books</text>
+          <text class="elabel-c" x="490" y="80">posting cycle</text>
+          <text class="nsub" x="490" y="128" style="fill:var(--faint)">(scheduled / manual)</text>
+        </svg>
+      </div>
+      <figcaption>A dispute’s <b>provisional credit</b> is exactly this: a memo credit that frees available credit at once, then gets <b>hard-posted</b> if the case is won — or <b>reversed</b> if it’s lost.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ RESPONSE CODES ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="eyebrow">ISO 8583 · field 39</span>
+      <h2>Every decision is a two-digit code</h2>
+      <p class="col">The issuer returns the exact response codes a real network carries, stamped alongside message metadata — MTI, STAN and RRN — on every authorization, approved or declined.</p>
+    </div>
+
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr><th>Code</th><th>Meaning</th><th>Verdict</th><th>Triggered by</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="code">00</td><td>Approved</td><td><span class="pill ok">APPROVE</span></td><td>all checks pass</td></tr>
+          <tr><td class="code">43</td><td>Stolen / blocked card</td><td><span class="pill no">DECLINE</span></td><td>card is BLOCKED</td></tr>
+          <tr><td class="code">51</td><td>Insufficient funds / over limit</td><td><span class="pill no">DECLINE</span></td><td>amount &gt; available credit</td></tr>
+          <tr><td class="code">54</td><td>Expired card</td><td><span class="pill no">DECLINE</span></td><td>past expiry</td></tr>
+          <tr><td class="code">57</td><td>Transaction not permitted</td><td><span class="pill no">DECLINE</span></td><td>card not ACTIVE</td></tr>
+          <tr><td class="code">61</td><td>Exceeds amount limit</td><td><span class="pill no">DECLINE</span></td><td>risk: per-txn ceiling</td></tr>
+          <tr><td class="code">62</td><td>Restricted card</td><td><span class="pill no">DECLINE</span></td><td>risk: blocked MCC / region</td></tr>
+          <tr><td class="code">65</td><td>Exceeds velocity</td><td><span class="pill no">DECLINE</span></td><td>risk: too many auths in window</td></tr>
+          <tr><td class="code">78</td><td>Account frozen / delinquent</td><td><span class="pill no">DECLINE</span></td><td>account not ACTIVE</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ DISPUTE LIFECYCLE ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="eyebrow">Disputes &amp; chargebacks</span>
+      <h2>A chargeback is a small state machine with money attached</h2>
+      <p class="col">When a cardholder disputes a posted purchase, the issuer can grant a provisional credit while it investigates. The merchant re-presents evidence; the case is won or lost — and the provisional credit is kept or clawed back accordingly.</p>
+    </div>
+
+    <figure>
+      <div class="figbox">
+        <svg viewBox="0 0 900 240" role="img" aria-label="Dispute states: OPEN to PROVISIONAL CREDIT to REPRESENTMENT, then forks to WON (credit hard-posted) or LOST (credit reversed).">
+          <defs>
+            <marker id="dp-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M0 0 L10 5 L0 10 z" fill="var(--border-strong)"/>
+            </marker>
+            <marker id="dp-arr-ok" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M0 0 L10 5 L0 10 z" fill="var(--approve)"/>
+            </marker>
+            <marker id="dp-arr-no" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M0 0 L10 5 L0 10 z" fill="var(--decline)"/>
+            </marker>
+          </defs>
+
+          <rect class="node" x="16" y="92" width="130" height="56" rx="10"/>
+          <text class="nlabel" x="81" y="118">OPEN</text>
+          <text class="nsub" x="81" y="136">chargeback</text>
+
+          <rect class="node-memo" x="212" y="92" width="176" height="56" rx="10"/>
+          <text class="nlabel" x="300" y="116">PROVISIONAL</text>
+          <text class="nsub" x="300" y="134">memo credit → avail ↑</text>
+
+          <rect class="node" x="454" y="92" width="170" height="56" rx="10"/>
+          <text class="nlabel" x="539" y="118">REPRESENTMENT</text>
+          <text class="nsub" x="539" y="136">merchant evidence</text>
+
+          <rect class="node-approve" x="716" y="24" width="168" height="56" rx="10"/>
+          <text class="nlabel" x="800" y="48">WON</text>
+          <text class="nsub" x="800" y="66">credit hard-posted</text>
+
+          <rect class="node-decline" x="716" y="160" width="168" height="56" rx="10"/>
+          <text class="nlabel" x="800" y="184">LOST</text>
+          <text class="nsub" x="800" y="202">credit reversed</text>
+
+          <line class="edge" x1="146" y1="120" x2="208" y2="120" marker-end="url(#dp-arr)"/>
+          <line class="edge edge-memo" x1="388" y1="120" x2="450" y2="120" marker-end="url(#dp-arr)"/>
+          <path class="edge edge-approve" d="M624 108 C 670 88, 680 60, 712 54" marker-end="url(#dp-arr-ok)"/>
+          <path class="edge edge-decline" d="M624 132 C 670 154, 680 182, 712 186" marker-end="url(#dp-arr-no)"/>
+          <text class="elabel-c" x="177" y="110">raise</text>
+          <text class="elabel-c" x="419" y="110">represent</text>
+          <text class="elabel tick-approve" x="648" y="72">resolve ✓</text>
+          <text class="elabel tick-decline" x="648" y="176">resolve ✗</text>
+        </svg>
+      </div>
+      <figcaption>Reason codes follow the network convention (fraud <b>10.4</b>, goods-not-received <b>13.1</b>, duplicate <b>12.6</b>). A <b>fraud tag</b> on a transaction auto-blocks the card and opens a FRAUD dispute in one step.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ REAL-TIME & AUTOMATION ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="eyebrow">Real-time &amp; automation</span>
+      <h2>Live where it must be, batched where it should be</h2>
+    </div>
+    <div class="panels">
+      <div class="panel">
+        <div class="ic">// risk</div>
+        <h3>Inline fraud engine</h3>
+        <p>Per-transaction ceiling, blocked MCC / country, and rolling-window velocity — evaluated on every auth before the funds check.</p>
+      </div>
+      <div class="panel">
+        <div class="ic">// stream</div>
+        <h3>SSE event feed</h3>
+        <p>Every lifecycle event is broadcast <span class="mono">AFTER_COMMIT</span> to subscribers, plus a recent-events buffer for late joiners.</p>
+      </div>
+      <div class="panel">
+        <div class="ic">// cron</div>
+        <h3>Scheduled batches</h3>
+        <p>Settlement, the memo→ledger posting cycle, and autopay each run on their own interval — and can be triggered by hand.</p>
+      </div>
+      <div class="panel">
+        <div class="ic">// loyalty</div>
+        <h3>Rewards &amp; autopay</h3>
+        <p>Points earn on spend with per-category multipliers and redeem to statement credit; autopay debits the standing amount on the due date.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ BILLING & LOANS ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="eyebrow">Billing · payments · lending</span>
+      <h2>The cycle that turns spending into a statement</h2>
+      <p class="col">At the cut date the billing engine sweeps the cycle, charges interest and fees, and computes the minimum due. Purchases can convert to EMIs; personal loans are underwritten and amortized on a reducing-balance schedule.</p>
+    </div>
+    <ol class="steps">
+      <li><b>Cut the statement</b> <span>— opening balance, purchases, cash advances, fees, interest, credits → closing balance.</span></li>
+      <li><b>Revolving interest &amp; late fee</b> <span>— charged when the prior statement wasn’t paid in full or the minimum was missed.</span></li>
+      <li><b>Minimum due</b> <span>— the greater of a percentage of the balance or a floor, capped at the balance.</span></li>
+      <li><b>Pay</b> <span>— minimum, total, or a custom amount; autopay can do this automatically on the due date.</span></li>
+      <li><b>Lend</b> <span>— convert a purchase to a fixed EMI plan, or take a risk-priced personal loan with a full amortization schedule.</span></li>
+    </ol>
+  </section>
+
+  <!-- ============ API SURFACE ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="eyebrow">The surface</span>
+      <h2>Thirteen endpoint groups, one journey</h2>
+      <p class="col">The REST API is ordered to mirror the lifecycle — walk it top to bottom in Swagger UI and you traverse the whole system.</p>
+    </div>
+    <div class="api">
+      <div class="card"><h3><span class="n">01–02</span> Onboarding</h3><ul><li><span class="m">POST</span> /customers</li><li><span class="m">POST</span> /merchants</li></ul></div>
+      <div class="card"><h3><span class="n">03</span> Card lifecycle</h3><ul><li><span class="m">POST</span> /cards · /activate</li><li><span class="m">POST</span> /block · /close</li><li><span class="m">POST</span> /cash-advance</li></ul></div>
+      <div class="card"><h3><span class="n">04</span> POS authorization</h3><ul><li><span class="m">POST</span> /pos/authorize</li></ul></div>
+      <div class="card"><h3><span class="n">05</span> Clearing &amp; settlement</h3><ul><li><span class="m">POST</span> /{id}/capture · /reverse</li><li><span class="m">POST</span> /settle · /refund</li><li><span class="m">POST</span> /{id}/report-fraud</li></ul></div>
+      <div class="card"><h3><span class="n">06</span> Billing</h3><ul><li><span class="m">POST</span> /statements/generate</li><li><span class="m">GET</span> /statements/latest</li></ul></div>
+      <div class="card"><h3><span class="n">07</span> Payments</h3><ul><li><span class="m">POST</span> /payments</li></ul></div>
+      <div class="card"><h3><span class="n">08</span> Loans &amp; EMI</h3><ul><li><span class="m">POST</span> /loans/apply · /disburse</li><li><span class="m">POST</span> /convert-emi</li><li><span class="m">POST</span> /pay-installment</li></ul></div>
+      <div class="card"><h3><span class="n">09</span> Real-time events</h3><ul><li><span class="m">GET</span> /stream/events</li><li><span class="m">GET</span> /events/recent</li></ul></div>
+      <div class="card"><h3><span class="n">10</span> Disputes</h3><ul><li><span class="m">POST</span> /disputes/open</li><li><span class="m">POST</span> /provisional-credit</li><li><span class="m">POST</span> /represent · /resolve</li></ul></div>
+      <div class="card"><h3><span class="n">11</span> Ledger &amp; adjustments</h3><ul><li><span class="m">POST</span> /adjustments</li><li><span class="m">POST</span> /posting/run</li></ul></div>
+      <div class="card"><h3><span class="n">12</span> Rewards</h3><ul><li><span class="m">GET</span> /rewards</li><li><span class="m">POST</span> /rewards/redeem</li></ul></div>
+      <div class="card"><h3><span class="n">13</span> Autopay</h3><ul><li><span class="m">POST</span> /autopay · run</li><li><span class="m">DELETE</span> /autopay</li></ul></div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="foot">
+      <span class="b">card-life-cycle</span>
+      <span>Java 21 · Spring Boot 3.3 · Data JPA · H2 · springdoc</span>
+      <span>POS → issuer · billing · payments · loans · disputes · rewards</span>
+    </div>
+  </footer>
+</main>
+
+<script>
+  (function () {
+    var btn = document.getElementById('themeToggle');
+    var root = document.documentElement;
+    function effective() {
+      var set = root.getAttribute('data-theme');
+      if (set) return set;
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    btn.addEventListener('click', function () {
+      root.setAttribute('data-theme', effective() === 'dark' ? 'light' : 'dark');
+    });
+  })();
+</script>
